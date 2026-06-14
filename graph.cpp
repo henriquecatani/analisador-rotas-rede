@@ -143,12 +143,46 @@ namespace graph{
             }
         }
             
-          
-          
-          void draw(){
-            export2dot("graphED2.dot");
-            std::system("dot -Tx11 graphED2.dot");
-          }
+        enum class output_format{
+            SCREEN,
+            PNG,
+            PDF
+        };
+
+        void draw (output_format format, std::string filename)
+        {
+            filename.append(".dot");
+            export2dot(filename);
+
+            std::string command;
+            
+            switch (format)
+            {
+            case output_format::SCREEN:
+              command = "dot -Tx11 ";
+              command.append(filename);
+              break;
+            case output_format::PNG:
+              command = "dot -Tpng ";
+              command.append(filename);
+              command.append(" -o ");
+              command.append(filename);
+              command.append(".png");
+              break;
+            case output_format::PDF:
+              command = "dot -Tpdf ";
+              command.append(filename);
+              command.append(" -o ");
+              command.append(filename);
+              command.append(".pdf");
+              break;
+            default: break;
+            }
+
+            const char* c_command = command.c_str();
+            std::system(c_command);
+        }
+
           void remove_link(const std::string &from, const std::string &to){
             auto pfrom = find(from);
             if (!pfrom) return;
