@@ -170,7 +170,7 @@ namespace graph{
                 if (visited.find(vizinho) == visited.end()) {
                   visited.insert(vizinho);
                   // Verificar se funciona ou nao
-                  maxDistance = std::max(maxDistance, vizinho->value); 
+                  //maxDistance = std::max(maxDistance, vizinho->value); 
                   fila.push(vizinho);
                 }
               }
