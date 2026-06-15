@@ -116,9 +116,9 @@ namespace graph{
                 dot << ";\n";
             }
              dot << "}\n"; // Fecha chaves do digraph
-        }
-        // Pintando o nodo se o nodo estiver em path_vector
-        void export2dot_visual(const std::string &filename, const std::vector<std::string> &path_vector){
+          }
+          // Pintando o nodo se o nodo estiver em path_vector
+          void export2dot_visual(const std::string &filename, const std::vector<std::string> &path_vector){
             std::ofstream dot(filename); // cria o arquivo
             dot << "digraph{\n";
             for (auto nd : nodes)
@@ -142,13 +142,50 @@ namespace graph{
                 }
             }
         }
+      
+          // TODO: Review
+          size_t calc_diametro(){
+              size_t diametroMax = 0;
+              for (auto nd : nodes) {
+                size_t current_diameter = BFS_max_distance(nd.first);
+                diametroMax = std::max(diametroMax, current_diameter);
+              }
+              return diametroMax;
+          }
+
+          size_t BFS_max_distance(const std::string& s) {
+            auto p = find(s);
+            if (!p) return 0;
+            visited.clear();
+            std::queue<node*> fila;
+            fila.push(p);
+            visited.insert(p);
+
+            size_t maxDistance = 0;
             
+            while (!fila.empty()) {
+              auto current = fila.front();
+              fila.pop();
+              
+              for (auto vizinho : current->links) {
+                if (visited.find(vizinho) == visited.end()) {
+                  visited.insert(vizinho);
+                  // Verificar se funciona ou nao
+                  //maxDistance = std::max(maxDistance, vizinho->value); 
+                  fila.push(vizinho);
+                }
+              }
+            }
+            return maxDistance;
+          }
+
         enum class output_format{
             SCREEN,
             PNG,
             PDF
         };
 
+      // TODO: draw com export visual
         void draw (output_format format, std::string filename)
         {
             filename.append(".dot");
