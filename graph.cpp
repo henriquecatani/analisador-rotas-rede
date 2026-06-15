@@ -184,7 +184,7 @@ namespace graph{
             }
             return maxDistance;
           }
-          
+
           // verificar se precisar mudar algo
           // nao sei se é bom retornar um vetor com os 5 com maior grau de entrada
           std::vector<std::string> roteadoresCriticos(){
