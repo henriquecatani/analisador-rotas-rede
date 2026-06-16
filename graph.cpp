@@ -142,7 +142,8 @@ namespace graph{
                 }
             }
         }
-          // Funcao calcula diametro verificar se ta certo
+      
+          // TODO: Review
           size_t calc_diametro(){
               size_t diametroMax = 0;
               for (auto nd : nodes) {
@@ -184,6 +185,47 @@ namespace graph{
             }
             return maxDistance;
           }
+
+        enum class output_format{
+            SCREEN,
+            PNG,
+            PDF
+        };
+
+      // TODO: draw com export visual
+        void draw (output_format format, std::string filename)
+        {
+            filename.append(".dot");
+            export2dot(filename);
+
+            std::string command;
+            
+            switch (format)
+            {
+            case output_format::SCREEN:
+              command = "dot -Tx11 ";
+              command.append(filename);
+              break;
+            case output_format::PNG:
+              command = "dot -Tpng ";
+              command.append(filename);
+              command.append(" -o ");
+              command.append(filename);
+              command.append(".png");
+              break;
+            case output_format::PDF:
+              command = "dot -Tpdf ";
+              command.append(filename);
+              command.append(" -o ");
+              command.append(filename);
+              command.append(".pdf");
+              break;
+            default: break;
+            }
+
+            const char* c_command = command.c_str();
+            std::system(c_command);
+        }
 
           // verificar se precisar mudar algo
           // nao sei se é bom retornar um vetor com os 5 com maior grau de entrada

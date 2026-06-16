@@ -6,10 +6,8 @@ bool readLog(const std::string& filename, graph::digraph& graph) {
     std::ifstream file;
     file.open(filename);
 
-    if (!file) {
-        std::cerr << "Erro ao abrir o arquivo: " << filename << std::endl;
-        return false;
-    }
+    if (!file) return false;
+
     std::string line; 
     std::getline(file, line); // ignore header
 
