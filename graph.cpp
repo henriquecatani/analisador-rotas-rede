@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <iostream>
 #include <queue>
+#include <optional>
 
 namespace graph{
 
@@ -193,10 +194,14 @@ namespace graph{
         };
 
       // TODO: draw com export visual
-        void draw (output_format format, std::string filename)
+        void draw (output_format format, std::string filename, const std::optional<std::vector<std::string>> &path_vector = std::nullopt)
         {
             filename.append(".dot");
-            export2dot(filename);
+
+            if (path_vector) export2dot_visual(filename, *path_vector);
+            else export2dot(filename);
+
+          
 
             std::string command;
             
