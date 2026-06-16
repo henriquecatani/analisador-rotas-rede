@@ -158,22 +158,29 @@ namespace graph{
             if (!p) return 0;
             visited.clear();
             std::queue<node*> fila;
+
             fila.push(p);
             visited.insert(p);
 
             size_t maxDistance = 0;
             
             while (!fila.empty()) {
-              auto current = fila.front();
-              fila.pop();
-              
-              for (auto vizinho : current->links) {
-                if (visited.find(vizinho) == visited.end()) {
-                  visited.insert(vizinho);
-                  // Verificar se funciona ou nao
-                  //maxDistance = std::max(maxDistance, vizinho->value); 
-                  fila.push(vizinho);
-                }
+              size_t size = fila.size();
+              bool achou = false;
+              for (auto i = 0; i < size; i++){
+                auto current = fila.front();
+                fila.pop();
+                
+                for (auto vizinho : current->links) {
+                  if (visited.find(vizinho) == visited.end()) {
+                    visited.insert(vizinho);
+                    fila.push(vizinho);
+                    achou = true;
+                  }
+                } 
+              }
+              if(achou){
+                maxDistance++;
               }
             }
             return maxDistance;
@@ -220,6 +227,33 @@ namespace graph{
             std::system(c_command);
         }
 
+          // verificar se precisar mudar algo
+          // nao sei se é bom retornar um vetor com os 5 com maior grau de entrada
+          std::vector<std::string> roteadoresCriticos(){
+              // std pair pra dar push back em 2 parametros
+              std::vector<std::pair<std::string, size_t>> vetor;
+              std::vector<std::string> vetorRetorno;
+              for( auto nd : nodes){
+                size_t ind = indegree(nd.second.value);
+                vetor.push_back({nd.second.value, ind});
+              }
+              // idk if it works or nah
+              std::sort(vetor.begin(), vetor.end(), [](const auto& a, const auto& b) {
+                return b > b; // nao sei se ta certo
+              });
+              // passa o a string(ip) do vetor
+              for (auto v : vetor){
+                for (auto i = 0; i < 5; i++){
+                  vetorRetorno.push_back(v.first);
+                }
+              }
+              return  vetorRetorno;
+          }
+
+          void draw(){
+            export2dot("graphED2.dot");
+            std::system("dot -Tx11 graphED2.dot");
+          }
           void remove_link(const std::string &from, const std::string &to){
             auto pfrom = find(from);
             if (!pfrom) return;
