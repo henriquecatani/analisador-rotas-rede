@@ -1,13 +1,18 @@
 // Trabalho Final ED2
 #include <iostream>
-#include "graph.cpp"
+// #include "graph.cpp"
 #include "parser.cpp"
+#include <vector>
 using namespace std;
 
 string filename;
 
+void exportarGrafo(graph::digraph& graph, const std::optional<std::vector<std::string>> &path_vector = std::nullopt);
+void encontraMenorCaminho(graph::digraph& graph);
+
 // Commit fazendo um esboço de como sera o output do terminal
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[])
+{
     if (argc < 2) {
         cerr << "Erro: Arquivo de log não fornecido.\n";
         cerr << "Uso: " << argv[0] << " <path_logfile>\n";
@@ -23,7 +28,7 @@ int main(int argc, char* argv[]){
     }
     
     cout << "Grafo de roteamento inicializado!" << endl;
-    cout << "Vértices únicos (IPS) " << graph.size() << " | " << "Arestas: " << "graph.num_links()" << endl;
+    cout << "Vértices únicos (IPS) " << graph.size() << " | " << "Arestas: " << graph.totalArestas() << endl;
 
     int opcao = 1;
     while (opcao)
@@ -35,6 +40,7 @@ int main(int argc, char* argv[]){
         cout << "4. Identificar Roteadores Críticos" << endl;
         cout << "0. Sair" << endl;
         cout << "================================================" << endl;
+        cout << "Opção: ";
         cin >> opcao;
 
         switch (opcao){
@@ -43,11 +49,23 @@ int main(int argc, char* argv[]){
                 break;
             case 2:
                 encontraMenorCaminho(graph);
-                //Fazer encontrar menor caminho
-            case 3:
-                //Fazer calcular o diâmetro do grafo
-            case 4:
-                //Fazer Identificar Roteadores Críticos
+                break;
+            case 3: {
+                int diametro;
+                diametro = graph.calc_diametro();
+                cout << "Diâmetro do Grafo: " << diametro << endl;
+                break;
+            }
+            case 4: {
+                vector<string> vetor5IPs = graph.roteadoresCriticos();
+                cout << "\nTop 5 endereços com maior Grau de Entrada(In-degree).\n";
+ 
+                for (auto a : vetor5IPs){
+                    cout << a << ", ";
+                }
+                cout << endl;
+                break;
+            }
             case 0: 
                 break;
         }
@@ -56,7 +74,7 @@ int main(int argc, char* argv[]){
 
 }
 
-void exportarGrafo(graph::digraph& graph, const std::optional<std::vector<std::string>> &path_vector = std::nullopt) {
+void exportarGrafo(graph::digraph& graph, const std::optional<std::vector<std::string>> &path_vector) {
     cout << "Selecione o formato de saída do Graphviz:" << endl;
     cout << "1. Tela" << endl;
     cout << "2. Imagem (PNG)" << endl;
@@ -81,6 +99,7 @@ void exportarGrafo(graph::digraph& graph, const std::optional<std::vector<std::s
         break;
     }
 }
+
 void encontraMenorCaminho(graph::digraph& graph){
     string origem, destino;
 
@@ -88,9 +107,16 @@ void encontraMenorCaminho(graph::digraph& graph){
     cin >> origem;
     cout << "Digite o IP de Destino: ";
     cin >> destino;
+
     vector<string> vetorMenorCaminho;
     vetorMenorCaminho = graph.shortest_path(origem, destino);
+    cout << "\nMenor Caminho: ";
+
+    for (auto ip : vetorMenorCaminho){
+        cout << ip << " >> ";
+    }
+    cout << endl;
     exportarGrafo(graph, vetorMenorCaminho);
-    // Fazer interface temrinal
     
 }
+

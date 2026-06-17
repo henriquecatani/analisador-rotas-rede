@@ -27,8 +27,12 @@ bool readLog(const std::string& filename, graph::digraph& graph) {
 
         if (hop_to != "*" && hop_from != "" && hop_to != "")
         {
-            graph.insert_nodo(hop_from);
-            graph.insert_nodo(hop_to);
+            auto foundNode = graph.find(hop_from);
+            if (!foundNode) graph.insert_nodo(hop_from);
+
+            foundNode = graph.find(hop_to);
+            if (!foundNode) graph.insert_nodo(hop_to);
+
             graph.insert_link(hop_from, hop_to);
         }
     }
