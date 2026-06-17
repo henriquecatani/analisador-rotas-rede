@@ -31,7 +31,11 @@ Isso irá gerar um executável chamado ```graphroute```.
   
 #### Alternativa
 ~~~
-g++ analiserotas.cpp graph.cpp -o graphroute
+g++ analiserotas.cpp graph.cpp -o graphroute  
+~~~
+
+~~~
+g++ -o graphroute analiserotas.cpp graph.cpp parser.cpp -Wl,--allow-multiple-definition
 ~~~
 
 
