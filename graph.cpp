@@ -310,17 +310,17 @@ namespace graph
 
                 if (vetor.size())
                 {
-                    int i = 0;
-                    for (auto p : vetor)
+                    int i = 0;  
+                    bool achou = false;
+                    for (auto p : vetor){
                         if ((i < 5) && (p.second <= ind)) {
                             vetor.insert(vetor.begin() + i, {nd.second.value, ind});
-                            break;
-                        }
-                        else {
-                            vetor.push_back({nd.second.value, ind});
+                            achou = true;
                             break;
                         }
                         i++;
+                    }
+                    if(!achou) vetor.push_back({nd.second.value, ind});
                 }
                 else // insere a primeira vez
                     vetor.push_back({nd.second.value, ind});
