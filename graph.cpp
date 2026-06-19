@@ -297,10 +297,54 @@ namespace graph
             const char *c_command = command.c_str();
             std::system(c_command);
         }
+        
+
+        std::vector<std::string> roteadoresCriticos()
+        {
+            // std pair pra dar push back em 2 parametros
+            std::vector<std::pair<std::string, size_t>> vetor;
+            std::vector<std::string> vetorRetorno;
+            for (auto nd : nodes)
+            {
+                size_t ind = indegree(nd.second.value);
+
+                if (vetor.size())
+                {
+                    int i = 0;
+                    for (auto p : vetor)
+                        if ((i < 5) && (p.second <= ind)) {
+                            vetor.insert(vetor.begin() + i, {nd.second.value, ind});
+                            break;
+                        }
+                        else {
+                            vetor.push_back({nd.second.value, ind});
+                            break;
+                        }
+                        i++;
+                }
+                else // insere a primeira vez
+                    vetor.push_back({nd.second.value, ind});
+            }
+            
+            // passa o a string(ip) do vetor
+            int i = 0;
+            for (auto v : vetor)
+            {
+                if (i < 5)
+                {
+                    // TODO: verificar erro nos 2 menores (input_3)
+                    std::cout << ", ip: " << v.first << " ind: " << v.second;
+                    vetorRetorno.push_back(v.first);
+                }
+                i++;
+            }
+            return vetorRetorno;
+        }
+
 
         // verificar se precisar mudar algo
         // nao sei se é bom retornar um vetor com os 5 com maior grau de entrada
-        std::vector<std::string> roteadoresCriticos()
+        std::vector<std::string> roteadoresCriticos_old()
         {
             // std pair pra dar push back em 2 parametros
             std::vector<std::pair<std::string, size_t>> vetor;
@@ -313,7 +357,7 @@ namespace graph
             // idk if it works or nah
             std::sort(vetor.begin(), vetor.end(), [](const auto &a, const auto &b)
                       {
-                          return b > b; // nao sei se ta certo
+                          return a.second > b.second; // nao sei se ta certo
                       });
             // passa o a string(ip) do vetor
             int i = 0;
