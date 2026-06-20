@@ -332,8 +332,6 @@ namespace graph
             {
                 if (i < 5)
                 {
-                    // TODO: verificar erro nos 2 menores (input_3)
-                    std::cout << ", ip: " << v.first << " ind: " << v.second;
                     vetorRetorno.push_back(v.first);
                 }
                 i++;

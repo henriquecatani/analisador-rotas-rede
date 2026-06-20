@@ -9,7 +9,7 @@ Esse programa reconstrói e analisa uma rede com logs de traceroute, com grafo d
 
 ```parser.cpp```: abrir o arquivo .log, ler as linhas e inserir os dados no grafo  
 
-```graph.cpp```: biblioteca, mudanças: não duplicar arestas, graphviz com destaques, calculo do diametro  
+```graph.cpp```: biblioteca, mudanças: não duplicar arestas, graphviz com destaques, calculo do diametro e roteadores criticos (maior indegree)
 
 
 ## Build
@@ -30,10 +30,6 @@ Isso irá gerar um executável chamado ```graphroute```.
 
   
 #### Alternativa
-~~~
-g++ analiserotas.cpp graph.cpp -o graphroute  
-~~~
-
 ~~~
 g++ -o graphroute analiserotas.cpp graph.cpp parser.cpp -Wl,--allow-multiple-definition
 ~~~
