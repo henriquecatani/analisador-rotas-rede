@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -O3 -std=c++17 -Wl,--allow-multiple-definition
+CXXFLAGS = -O3 -std=c++17 -Wl,--allow-multiple-definition
 
 TARGET = graphroute
 

@@ -95,6 +95,7 @@ namespace graph
             }
             return qtd;
         }
+
         // Caso nao exista retorna nullptr, deveria retornar 0
         size_t outdegree2(const std::string &n)
         {
@@ -113,13 +114,15 @@ namespace graph
 
             return 0;
         }
+
         int totalArestas(){
           int arestas = 0;
-          for (auto nd : nodes) {
+          for (auto nd : nodes)
               arestas += outdegree(nd.first);
-          }
+
           return arestas;
         }
+
         void export2dot(const std::string &filename)
         {
             std::ofstream dot(filename); // cria o arquivo
@@ -142,9 +145,14 @@ namespace graph
             dot << "}\n"; // Fecha chaves do digraph
         }
 
-        void export2dot_visual(const std::string &filename, const std::vector<std::string> &path_vector){
+        // Pintando o nodo se o nodo estiver em path_vector
+        void export2dot_visual (
+            const std::string &filename, const std::vector<std::string> &path_vector)
+        {
             std::ofstream dot(filename); // cria o arquivo
             dot << "digraph{\n";
+
+            // dois loops pois eh necessario dizer a cor do nodo antes
             for (auto nd : nodes)
                 if (std::find(path_vector.begin(), path_vector.end(), nd.first) != path_vector.end())
                     dot << "\t\"" << nd.first << "\" [style=filled, fillcolor=\"lightblue\"];\n";
@@ -156,48 +164,15 @@ namespace graph
                 {
                     dot << " -> {";
                     for (auto vizinho : nd.second.links)
-                    {
                         dot << "\"" << vizinho->value << "\" ";
-                    }
 
-                    dot << "}";
-                    // if (std::find(path_vector.begin(), path_vector.end(), nd.first) != path_vector.end())
-                    //     dot << " [style=filled, fillcolor=\"red\"]";
-                    dot << ";\n";
+                    dot << "};\n";
                 }
             }
             dot << "}\n";
         }
 
-        // Pintando o nodo se o nodo estiver em path_vector
-        /*void export2dot_visual(const std::string &filename, const std::vector<std::string> &path_vector)
-        {
-            std::ofstream dot(filename); // cria o arquivo
-            dot << "digraph{\n";
-            for (auto nd : nodes)
-            { 
-                if (std::find(path_vector.begin(), path_vector.end(), nd.first) != path_vector.end())
-                {
-                    dot << "\t\"" << nd.first << "\" [style=filled, fillcolor=\"red\"]";
-                }
-                else
-                {
-                    dot << "\t\"" << nd.first << "\"";
-                }
-                if (nd.second.links.size() > 0)
-                {
-                    dot << " -> {";
-                    for (auto vizinho : nd.second.links)
-                    {
-                        dot << "\"" << vizinho->value << "\" ";
-                    }
-                    dot << "};\n";
-                }
-            }
-            dot << "}\n";
-        }*/
 
-        // TODO: Review
         size_t calc_diametro()
         {
             size_t diametroMax = 0;
@@ -256,11 +231,12 @@ namespace graph
             PDF
         };
 
-        // TODO: draw com export visual
-        void draw(
+        void draw (
             output_format format, std::string filename,
             const std::optional<std::vector<std::string>> &path_vector = std::nullopt)
         {
+            // usando optionals para não colorir se o vetor for nulo
+
             filename.append(".dot");
 
             if (path_vector)
@@ -312,7 +288,8 @@ namespace graph
                 {
                     int i = 0;  
                     bool achou = false;
-                    for (auto p : vetor){
+                    for (auto p : vetor) {
+                        // ordenando somente os 5 primeiros na inserção
                         if ((i < 5) && (p.second <= ind)) {
                             vetor.insert(vetor.begin() + i, {nd.second.value, ind});
                             achou = true;
@@ -330,41 +307,8 @@ namespace graph
             int i = 0;
             for (auto v : vetor)
             {
-                if (i < 5)
-                {
-                    vetorRetorno.push_back(v.first);
-                }
+                if (i < 5) vetorRetorno.push_back(v.first);
                 i++;
-            }
-            return vetorRetorno;
-        }
-
-
-        // verificar se precisar mudar algo
-        // nao sei se é bom retornar um vetor com os 5 com maior grau de entrada
-        std::vector<std::string> roteadoresCriticos_old()
-        {
-            // std pair pra dar push back em 2 parametros
-            std::vector<std::pair<std::string, size_t>> vetor;
-            std::vector<std::string> vetorRetorno;
-            for (auto nd : nodes)
-            {
-                size_t ind = indegree(nd.second.value);
-                vetor.push_back({nd.second.value, ind});
-            }
-            // idk if it works or nah
-            std::sort(vetor.begin(), vetor.end(), [](const auto &a, const auto &b)
-                      {
-                          return a.second > b.second; // nao sei se ta certo
-                      });
-            // passa o a string(ip) do vetor
-            int i = 0;
-            for (auto v : vetor)
-            {
-                if (i < 5){
-                    vetorRetorno.push_back(v.first);
-                }
-                  i++;
             }
             return vetorRetorno;
         }
@@ -383,6 +327,7 @@ namespace graph
                 return;             // Não é vizinho da origem
             pfrom->links.erase(it); // É vizinho será excluído
         }
+
         void remove_node(const std::string &key)
         {
             auto pkey = find(key);
@@ -395,7 +340,7 @@ namespace graph
             nodes.erase(key);
             return;
         }
-        // Level só para bonito
+        
         void recursive_DFS(node *p, int level = 0)
         {
             if (visited.count(p)) // Já foi visited
@@ -407,6 +352,7 @@ namespace graph
                 recursive_DFS(in, level + 1);
             }
         }
+
         void DFS_from(const std::string &s)
         {
             auto p = find(s); // Our find
@@ -415,6 +361,7 @@ namespace graph
             visited.clear();
             recursive_DFS(p);
         }
+
         void BFS_from(const std::string &s)
         {
             auto p = find(s);
@@ -440,6 +387,7 @@ namespace graph
             }
             std::cout << "\n";
         }
+
         std::vector<std::string> shortest_path(const std::string &from, const std::string &to)
         {
             std::vector<std::string> path;
